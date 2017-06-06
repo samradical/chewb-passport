@@ -1,12 +1,15 @@
 {
-  "name": "@samelie/chewb-passport",
+  "name": "chewb-passport",
+  "description": "",
+  "homepage": "https://github.com/samradical/chewb-passport",
+  "author": "Sam Elie <samradelie@gmail.com>",
   "version": "0.0.1",
-  "main": "index.js",
-  "author": {
-    "name": "Sam Elie",
-    "email": "samradelie@gmail.com",
-    "url": "https://github.com/samelie"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/samradical/chewb-passport.git",
+    "web": "https://github.com/samradical/chewb-passport/"
   },
+  "main": "index.js",
   "dependencies": {
     "body-parser": "^1.13.2",
     "connect-ensure-login": "^0.1.1",
@@ -20,5 +23,17 @@
     "passport-instagram": "^1.0.0",
     "passport-youtube-v3": "^2.0.0",
     "query-string": "^4.2.3"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/samradical/chewb-passport/issues"
+  },
+  "engines": {
+    "node": ">=5.0.0"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/samradical/chewb-passport/raw/master/LICENSE"
+    }
+  ]
 }

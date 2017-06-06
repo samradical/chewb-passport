@@ -1,41 +1,43 @@
-var express = require('express');
-var chewbPassport = require('../index')
-
-// Create a new Express application.
-var app = express();
-
-// Configure view engine to render EJS templates.
-app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
-
-// Define routes.
-app.get('/',
-  function(req, res) {
-    res.render('home', { user: req.user });
-  });
-
-app.get('/login',
-  function(req, res) {
-    res.render('login');
-  });
+const path = require('path')
+const Chewb = require('chewb-server')
+const ChewbPassport = require('../index')
+let server = new Chewb()
 
 let strats = [{
   name: 'facebook',
-  clientId: '1656736837874441',
-  clientSecret: 'f9da079389ba1b0aef80dc978c632958',
+  clientId: process.env.FACEBOOK_ID,
+  clientSecret: process.env.FACEBOOK_SECRET,
   authUrl: '/login/facebook',
-  redirectUrl: '/login/facebook/return'
+  redirectUrl: '/login/facebook/return',
+  callbackUrl: `http://localhost:8080/login/facebook/success`
 }, {
   name: 'instagram',
-  clientId: 'c82f60355b9d42869a65bad4e0753fdc',
-  clientSecret: '7ac9fac8b09b4634af1720e05d376a75',
+  scope: ['public_content'],
+  clientId: process.env.INSTAGRAM_ID,
+  clientSecret: process.env.INSTAGRAM_SECRET,
   authUrl: '/login/instagram',
-  redirectUrl: '/login/instagram/return'
+  redirectUrl: '/login/instagram/return',
+  callbackUrl: `http://localhost:8080/login/instagram/success`
+}, {
+  name: 'youtube',
+  scope: [
+    "https://www.googleapis.com/auth/youtube.upload",
+    "https://www.googleapis.com/auth/youtube",
+    "https://www.googleapis.com/auth/youtubepartner",
+    'https://www.googleapis.com/auth/youtube.readonly',
+    'https://www.googleapis.com/auth/youtube.force-ssl'
+  ],
+  clientId: process.env.YOUTUBE_ID,
+  clientSecret: process.env.YOUTUBE_SECRET,
+  authUrl: '/login/youtube',
+  redirectUrl: '/login/youtube/return',
+  callbackUrl: `http://localhost:8080/login/youtube/success`
 }]
 
-let Chewb = new chewbPassport(app, strats, {
-  host: 'http://localhost:3000/',
-  baseRoute: ''
-})
-
-app.listen(3000);
+let chewbPassport = new ChewbPassport(
+  server.app,
+  strats, {
+    host: `http://${server.host}:${server.port}/`,
+    baseRoute: '',
+    logOut: true
+  })
