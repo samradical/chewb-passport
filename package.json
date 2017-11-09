@@ -3,7 +3,7 @@
   "description": "",
   "homepage": "https://github.com/samradical/chewb-passport",
   "author": "Sam Elie <samradelie@gmail.com>",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/samradical/chewb-passport.git",
@@ -11,18 +11,18 @@
   },
   "main": "index.js",
   "dependencies": {
-    "body-parser": "^1.13.2",
+    "body-parser": "^1.18.2",
     "connect-ensure-login": "^0.1.1",
-    "cookie-parser": "^1.3.5",
-    "express": "^4.13.1",
-    "express-session": "^1.11.3",
-    "morgan": "^1.6.1",
-    "passport": "^0.2.2",
-    "passport-facebook": "^2.0.0",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.2",
+    "express-session": "^1.15.6",
+    "morgan": "^1.9.0",
+    "passport": "^0.4.0",
+    "passport-facebook": "^2.1.1",
     "passport-google-oauth": "^1.0.0",
     "passport-instagram": "^1.0.0",
-    "passport-youtube-v3": "^2.0.0",
-    "query-string": "^4.2.3"
+    "passport-youtube-v3": "^2.1.0",
+    "query-string": "^5.0.1"
   },
   "bugs": {
     "url": "https://github.com/samradical/chewb-passport/issues"

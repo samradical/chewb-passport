@@ -1,6 +1,7 @@
 var Strategy = require('passport-instagram').Strategy;
 
 const Instagram = function(passport, clientID, clientSecret, callbackURL){
+  console.log(callbackURL);
   return new Strategy({
     clientID: clientID,
     clientSecret: clientSecret,

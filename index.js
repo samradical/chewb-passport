@@ -1,7 +1,6 @@
-var passport = require('passport');
-var Strategies = require('./strategies/index');
-const queryString = require('query-string');
-
+var passport = require("passport")
+var Strategies = require("./strategies/index")
+const queryString = require("query-string")
 
 /*
 @
@@ -24,34 +23,39 @@ strategies:[
 */
 class ChewbPassport {
   constructor(app, strategies, options) {
-
     const { host } = options
 
     if (!host) {
-      throw new Error('Need options.host')
+      throw new Error("Need options.host")
       return
     }
 
     passport.serializeUser(function(user, cb) {
-      cb(null, user);
-    });
+      cb(null, user)
+    })
 
     passport.deserializeUser(function(obj, cb) {
-      cb(null, obj);
-    });
+      cb(null, obj)
+    })
 
-    const bodyParser = require('body-parser')
+    const bodyParser = require("body-parser")
 
-    app.use(require('morgan')('combined'));
-    app.use(require('cookie-parser')());
-    app.use(bodyParser.urlencoded({ extended: false }));
+    app.use(require("morgan")("combined"))
+    app.use(require("cookie-parser")())
+    app.use(bodyParser.urlencoded({ extended: false }))
     app.use(bodyParser.json())
-    app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+    app.use(
+      require("express-session")({
+        secret: "keyboard cat",
+        resave: true,
+        saveUninitialized: true,
+      })
+    )
 
     // Initialize Passport and restore authentication state, if any, from the
     // session.
-    app.use(passport.initialize());
-    app.use(passport.session());
+    app.use(passport.initialize())
+    app.use(passport.session())
 
     strategies.forEach(stratData => {
       this._addStrategy(app, stratData, options)
@@ -60,6 +64,9 @@ class ChewbPassport {
 
   _addStrategy(app, stratData, options) {
     const { host, baseRoute } = options
+
+    const serverHost = `${process.env.SERVER_PROTOCALL ||
+      "http"}://${process.env.HOST}:${process.env.PORT}`
 
     let {
       name,
@@ -71,13 +78,17 @@ class ChewbPassport {
       callbackUrl,
     } = stratData
 
-    passport.use(Strategies[name](
-      passport, clientId, clientSecret, redirectUrl, scope
-    ))
+    passport.use(
+      Strategies[name](
+        passport,
+        clientId,
+        clientSecret,
+        `${serverHost}${redirectUrl}`,
+        scope
+      )
+    )
 
-
-    app.get(`${baseRoute}${authUrl}`,
-      passport.authenticate(name));
+    app.get(`${baseRoute}${authUrl}`, passport.authenticate(name))
 
     /*app.get(`${baseRoute}/${authUrl}`,
       (req, res) => {
@@ -86,18 +97,25 @@ class ChewbPassport {
       });*/
 
     //callback
-    app.get(`${baseRoute}${redirectUrl}`,
-      passport.authenticate(name, { failureRedirect: '/login' }),
-      (req, res) => {
-        res.redirect('/');
-        let { user } = req
-        if(options.logOut){
-          req.logout();
-        }
-        const {profile} = user
-        res.redirect(`${callbackUrl}?${queryString.stringify(user)}&profile=${queryString.stringify(profile)}`);
-      });
+    console.log(`${name} redirect: ${redirectUrl}`)
 
+    app.get(
+      `${redirectUrl}`,
+      passport.authenticate(name, { failureRedirect: "/login" }),
+      (req, res) => {
+        let { user } = req
+
+        if (options.logOut) {
+          req.logout()
+        }
+        const { profile } = user
+        res.redirect(
+          `${callbackUrl}?${queryString.stringify(
+            user
+          )}&profile=${queryString.stringify(profile)}`
+        )
+      }
+    )
   }
 }
 
